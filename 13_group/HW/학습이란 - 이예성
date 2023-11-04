@@ -7,3 +7,20 @@
 훈련 데이터로부터 가중치 매개변수의 최적값을 자동으로 획득 하는 것이며
 이 가중치를 조절하여서 손실함수의 함수값이 최소화되도록 학습시키는 것이 학습의 목적이며 좋은 학습이라고 할 수 있다.
 
+n_epochs = 50
+t0, t1 = 5, 50  # 학습 스케줄 하이퍼파라미터 값을 지정해준다.
+
+def learning_schedule(t): 
+    return t0 / (t + t1)
+
+theta = np.random.randn(2,1)  # 랜덤 초기화
+
+for epoch in range(n_epochs):
+    for i in range(m): # 데이터 수만큼 범위를 설정해 주었다.
+        random_index = np.random.randint(m) # m전까지는 randint를 생성해준다
+        xi = X_b[random_index:random_index+1] #xi 는 한 개의 샘플링이며
+        yi = y[random_index:random_index+1] # yi 는 정답 샘플링이다.
+        gradients = 2 * xi.T.dot(xi.dot(theta) - yi) # 그래디언트를 계산을 하고 
+        eta = learning_schedule(epoch * m + i) # 에포크와 m,i에 따르는 새로운 learning_schedule을 계산한다
+        theta = theta - eta * gradients # 그리고 업데이트를 했다
+      
